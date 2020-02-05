@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 var FLAT_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var FLAT_TYPES_DICT = {'palace': 'Дворец', 'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'};
 var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
@@ -8,10 +9,93 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var pinsMap = document.querySelector('.map__pins');
+ */
 
 var map = document.querySelector('.map');
-var pinsMap = document.querySelector('.map__pins');
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
+var mapFiltersContainer = document.querySelector('.map__filters');
+var mapFilters = mapFiltersContainer.querySelectorAll('input, select');
+var mapPinMain = document.querySelector('.map__pin--main');
+var adFormAddress = adForm.querySelector('[name="address"]');
+var adFormRoomNumber = adForm.querySelector('[name="rooms"]');
+var adFormCapacity = adForm.querySelector('[name="capacity"]');
+var adFormSubmitButton = adForm.querySelector('.ad-form__submit');
 
+var disablePage = function () {
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].setAttribute('disabled', 'disabled');
+  }
+  for (var j = 0; j < mapFilters.length; j++) {
+    mapFilters[j].setAttribute('disabled', 'disabled');
+  }
+  var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
+  var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight / 2);
+  adFormAddress.setAttribute('placeholder', 'left: ' + x + ', right: ' + y);
+};
+
+var getAddress = function () {
+  var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
+  var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight + 20); // 20 - это примерная высота острой части - не могу ее точно найти
+  adFormAddress.setAttribute('placeholder', 'left: ' + x + ', right: ' + y);
+};
+
+var activatePage = function () {
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].removeAttribute('disabled');
+  }
+  for (var j = 0; j < mapFilters.length; j++) {
+    mapFilters[j].removeAttribute('disabled');
+  }
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  disablePage();
+});
+
+var checkValidityCapacity = function () {
+  var roomsNumber = adFormRoomNumber.selectedOptions[0].value;
+  var capacity = adFormCapacity.selectedOptions[0].value;
+  adFormCapacity.setCustomValidity('');
+  if (roomsNumber === '100' && capacity > 0) {
+    adFormCapacity.setCustomValidity('Такое обычно арендуют для вечеринок. Выберите вариант Не для гостей');
+    return;
+  }
+  if (roomsNumber < capacity) {
+    adFormCapacity.setCustomValidity('Для ' + capacity + ' гостей должно быть не меньше ' + capacity + ' комнат!');
+  }
+};
+
+adFormRoomNumber.addEventListener('change', function () {
+  checkValidityCapacity();
+});
+
+adFormCapacity.addEventListener('change', function () {
+  checkValidityCapacity();
+});
+
+adFormSubmitButton.addEventListener('click', function () {
+  checkValidityCapacity();
+});
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    activatePage();
+    getAddress();
+  }
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    activatePage();
+    getAddress();
+  }
+});
+
+/*
 var pinTemplate = document.querySelector('#pin')
   .content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card')
@@ -20,6 +104,7 @@ var cardTemplate = document.querySelector('#card')
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
+
 
 var getRandomArray = function (arr) {
   var randomArray = [];
@@ -33,7 +118,9 @@ var getRandomArray = function (arr) {
   return randomArray;
 };
 
+
 // функция для создания массива из 8 сгенерированных JS объектов
+
 var getFlatsArray = function () {
   var flats = [];
   for (var i = 1; i < 8; i++) {
@@ -64,7 +151,6 @@ var getFlatsArray = function () {
   return flats;
 };
 
-map.classList.remove('map--faded');
 
 // функция создания DOM-элемента на основе JS-объекта
 var renderPin = function (obj) {
@@ -89,7 +175,7 @@ var printPinsToMap = function (printArea, arr) {
   return printArea.appendChild(createFragmentFromArray(arr));
 };
 
-printPinsToMap(pinsMap, getFlatsArray());
+//printPinsToMap(pinsMap, getFlatsArray());
 
 var renderCard = function (obj) {
   var flatCard = cardTemplate.cloneNode(true);
@@ -143,4 +229,6 @@ var printCard = function (printArea, obj) {
   return printArea.insertBefore(newCard, childElement);
 };
 
-printCard(map, getFlatsArray()[3]);
+//printCard(map, getFlatsArray()[3]);
+
+ */
