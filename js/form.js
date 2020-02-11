@@ -36,6 +36,7 @@
     if (evt.button === 0) {
       window.start.enablePage();
       window.start.getAddress();
+      window.server.load(window.start.successHandler, window.start.errorHandler);
     }
   });
 
@@ -43,6 +44,7 @@
     if (evt.key === window.const.ENTER_KEY) {
       window.start.enablePage();
       window.start.getAddress();
+      window.server.load(window.start.successHandler, window.start.errorHandler);
     }
   });
 })();

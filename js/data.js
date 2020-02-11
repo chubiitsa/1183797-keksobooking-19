@@ -1,13 +1,24 @@
 'use strict';
 
 (function () {
-  /*
-  var pinsMap = document.querySelector('.map__pins');
+
   var pinTemplate = document.querySelector('#pin')
     .content.querySelector('.map__pin');
-  var cardTemplate = document.querySelector('#card')
-    .content.querySelector('.map__card');
 
+  // функция создания DOM-элемента на основе JS-объекта
+  var renderPin = function (obj) {
+    var flatPin = pinTemplate.cloneNode(true);
+    flatPin.setAttribute('style', 'left: ' + obj.location.x + 'px; top: ' + obj.location.y + 'px');
+    flatPin.querySelector('img').src = obj.author.avatar;
+    flatPin.querySelector('img').alt = obj.offer.title;
+    return flatPin;
+  };
+  window.data = {
+    renderPin: renderPin,
+  };
+})();
+
+/*
 // функция для создания массива из 8 сгенерированных JS объектов
   var generateFlatsArray = function () {
     var flats = [];
@@ -39,36 +50,24 @@
     return flats;
   };
 
-  // функция создания DOM-элемента на основе JS-объекта
-
-
-  var renderPin = function (obj) {
-    var flatPin = pinTemplate.cloneNode(true);
-    flatPin.setAttribute('style', 'left: ' + obj.location.x + 'px; top: ' + obj.location.y + 'px');
-    flatPin.querySelector('img').src = obj.author.avatar;
-    flatPin.querySelector('img').alt = obj.offer.title;
-    return flatPin;
-  };
-
-  // функция заполнения блока DOM-элементами на основе массива JS-объектов
+// функция заполнения блока DOM-элементами на основе массива JS-объектов
   var createFragmentFromArray = function (flatsArr) {
-    var fragment = document.createDocumentFragment();
+  var fragment = document.createDocumentFragment();
     for (var j = 0; j < flatsArr.length; j++) {
       fragment.appendChild(renderPin(flatsArr[j]));
     }
     return fragment;
   };
 
-
 // функция добавления блока с DOM-элементами на страницу
   var printPinsToMap = function (printArea, arr) {
     return printArea.appendChild(createFragmentFromArray(arr));
   };
 
-//printPinsToMap(pinsMap, generateFlatsArray());
-
-  var renderCard = function (obj) {
-    var flatCard = cardTemplate.cloneNode(true);
+var cardTemplate = document.querySelector('#card')
+   .content.querySelector('.map__card');
+var renderCard = function (obj) {
+var flatCard = cardTemplate.cloneNode(true);
 
     flatCard.querySelector('.popup__title').textContent = obj.offer.title;
     flatCard.querySelector('.popup__text--address').textContent = obj.offer.address;
@@ -121,6 +120,4 @@
 
 //printCard(map, generateFlatsArray()[3]);
 
-   */
-})();
-
+*/

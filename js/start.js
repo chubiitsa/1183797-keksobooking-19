@@ -2,6 +2,7 @@
 
 (function () {
   var map = document.querySelector('.map');
+  var pinsMap = document.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('[name="address"]');
@@ -42,8 +43,37 @@
     disablePage();
   });
 
+  var successHandler = function (flats) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < flats.length; i++) {
+      fragment.appendChild(window.data.renderPin(flats[i]));
+    }
+    pinsMap.appendChild(fragment);
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #503931;';
+    node.style.position = 'absolute';
+    node.style.width = '600px';
+    node.style.minHeight = '80px';
+    node.style.top = '260px';
+    node.style.left = '0';
+    node.style.right = '0';
+    node.style.fontSize = '20px';
+    node.style.color = 'white';
+    node.style.borderRadius = '10px';
+    node.style.opacity = '0.8';
+    node.style.padding = '25px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   window.start = {
     enablePage: enablePage,
     getAddress: getAddress,
+    successHandler: successHandler,
+    errorHandler: errorHandler,
   };
 })();
