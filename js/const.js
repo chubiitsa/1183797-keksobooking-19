@@ -10,6 +10,7 @@
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var ENTER_KEY = 'Enter';
+  var ESC_KEY = 'Escape';
 
   window.const = {
     FLAT_TYPES: FLAT_TYPES,
@@ -21,5 +22,6 @@
     PIN_WIDTH: PIN_WIDTH,
     PIN_HEIGHT: PIN_HEIGHT,
     ENTER_KEY: ENTER_KEY,
+    ESC_KEY: ESC_KEY,
   };
 })();

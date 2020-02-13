@@ -4,6 +4,7 @@
   var map = document.querySelector('.map');
   var pinsMap = document.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('[name="address"]');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
@@ -36,7 +37,8 @@
   var getAddress = function () {
     var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
     var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight + 20); // 20 - это примерная высота острой части - не могу ее точно найти
-    adFormAddress.setAttribute('placeholder', 'left: ' + x + ', right: ' + y);
+    adFormAddress.value = 'left: ' + x + ', right: ' + y;
+    adFormAddress.setAttribute('readonly', 'readonly');
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -47,7 +49,7 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < flats.length; i++) {
-      fragment.appendChild(window.data.renderPin(flats[i]));
+      fragment.appendChild(window.pin.render(flats[i]));
     }
     pinsMap.appendChild(fragment);
   };
@@ -75,5 +77,7 @@
     getAddress: getAddress,
     successHandler: successHandler,
     errorHandler: errorHandler,
+    mapPinMain: mapPinMain,
+    mapPin: mapPin,
   };
 })();
