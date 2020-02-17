@@ -12,8 +12,8 @@
   var adFormCheckout = adForm.querySelector('[name="timeout"]');
 
   var checkValidityCapacity = function () {
-    var roomsNumber = adFormRoomNumber.selectedOptions[0].value;
-    var capacity = adFormCapacity.selectedOptions[0].value;
+    var roomsNumber = adFormRoomNumber.value;
+    var capacity = adFormCapacity.value;
     adFormCapacity.setCustomValidity('');
     if (roomsNumber === '100' && capacity > 0) {
       adFormCapacity.setCustomValidity('Такое обычно арендуют для вечеринок. Выберите вариант Не для гостей');
@@ -25,23 +25,24 @@
   };
 
   var setMinPrice = function () {
-    var flatType = adFormFlatType.selectedOptions[0].value;
-    if (flatType === 'bungalo') {
-      adFormPrice.setAttribute('min', '0');
-      adFormPrice.setAttribute('placeholder', '0');
+    var flatType = adFormFlatType.value;
+    var value;
+
+    switch (flatType) {
+      case 'bungalo':
+        value = 0; break;
+      case 'flat':
+        value = 1000; break;
+      case 'house':
+        value = 5000; break;
+      case 'palace' :
+        value = 10000; break;
+      default:
+        value = 1000;
     }
-    if (flatType === 'flat') {
-      adFormPrice.setAttribute('min', '1000');
-      adFormPrice.setAttribute('placeholder', '1000');
-    }
-    if (flatType === 'house') {
-      adFormPrice.setAttribute('min', '5000');
-      adFormPrice.setAttribute('placeholder', '5000');
-    }
-    if (flatType === 'palace') {
-      adFormPrice.setAttribute('min', '10000');
-      adFormPrice.setAttribute('placeholder', '10000');
-    }
+
+    adFormPrice.setAttribute('min', value);
+    adFormPrice.setAttribute('placeholder', value);
   };
 
   adFormCheckin.addEventListener('change', function () {

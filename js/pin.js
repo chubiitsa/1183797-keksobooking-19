@@ -10,17 +10,7 @@
     flatPin.setAttribute('style', 'left: ' + obj.location.x + 'px; top: ' + obj.location.y + 'px');
     flatPin.querySelector('img').src = obj.author.avatar;
     flatPin.querySelector('img').alt = obj.offer.title;
-
-    flatPin.addEventListener('click', function () {
-      window.card.show(obj);
-    });
-
-    flatPin.addEventListener('keydown', function (evt) {
-      if (evt.key === window.const.ENTER_KEY) {
-        window.card.show(obj);
-      }
-    });
-
+    flatPin.dataset.index = obj.index;
     return flatPin;
   };
   window.pin = {

@@ -10,6 +10,7 @@
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var mapFiltersContainer = document.querySelector('.map__filters');
   var mapFilters = mapFiltersContainer.querySelectorAll('input, select');
+  var similarFlats = [];
 
   var disablePage = function () {
     for (var i = 0; i < adFormFieldsets.length; i++) {
@@ -47,11 +48,19 @@
 
   var successHandler = function (flats) {
     var fragment = document.createDocumentFragment();
-
+    for (var j = 0; j < flats.length; j++) {
+      flats[j].index = j;
+    }
+    similarFlats.length = 0;
     for (var i = 0; i < flats.length; i++) {
       fragment.appendChild(window.pin.render(flats[i]));
+      similarFlats.push(flats[i]);
     }
     pinsMap.appendChild(fragment);
+  };
+
+  var getSimilarFlats = function () {
+    return similarFlats;
   };
 
   var errorHandler = function (errorMessage) {
@@ -71,12 +80,12 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
   window.start = {
     enablePage: enablePage,
     getAddress: getAddress,
     successHandler: successHandler,
     errorHandler: errorHandler,
+    getFlats: getSimilarFlats,
     mapPinMain: mapPinMain,
     mapPin: mapPin,
   };
