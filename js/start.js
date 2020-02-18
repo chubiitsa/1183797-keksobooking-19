@@ -4,11 +4,13 @@
   var map = document.querySelector('.map');
   var pinsMap = document.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('[name="address"]');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var mapFiltersContainer = document.querySelector('.map__filters');
   var mapFilters = mapFiltersContainer.querySelectorAll('input, select');
+  var similarFlats = [];
 
   var disablePage = function () {
     for (var i = 0; i < adFormFieldsets.length; i++) {
@@ -36,7 +38,8 @@
   var getAddress = function () {
     var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
     var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight + 20); // 20 - это примерная высота острой части - не могу ее точно найти
-    adFormAddress.setAttribute('placeholder', 'left: ' + x + ', right: ' + y);
+    adFormAddress.value = 'left: ' + x + ', right: ' + y;
+    adFormAddress.setAttribute('readonly', 'readonly');
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -45,11 +48,19 @@
 
   var successHandler = function (flats) {
     var fragment = document.createDocumentFragment();
-
+    for (var j = 0; j < flats.length; j++) {
+      flats[j].index = j;
+    }
+    similarFlats.length = 0;
     for (var i = 0; i < flats.length; i++) {
-      fragment.appendChild(window.data.renderPin(flats[i]));
+      fragment.appendChild(window.pin.render(flats[i]));
+      similarFlats.push(flats[i]);
     }
     pinsMap.appendChild(fragment);
+  };
+
+  var getSimilarFlats = function () {
+    return similarFlats;
   };
 
   var errorHandler = function (errorMessage) {
@@ -69,11 +80,13 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
   window.start = {
     enablePage: enablePage,
     getAddress: getAddress,
     successHandler: successHandler,
     errorHandler: errorHandler,
+    getFlats: getSimilarFlats,
+    mapPinMain: mapPinMain,
+    mapPin: mapPin,
   };
 })();
