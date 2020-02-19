@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+  var adFormAddress = adForm.querySelector('[name="address"]');
   var adFormRoomNumber = adForm.querySelector('[name="rooms"]');
   var adFormCapacity = adForm.querySelector('[name="capacity"]');
   var adFormFlatType = adForm.querySelector('[name="type"]');
@@ -10,6 +10,29 @@
   var adFormSubmitButton = adForm.querySelector('.ad-form__submit');
   var adFormCheckin = adForm.querySelector('[name="timein"]');
   var adFormCheckout = adForm.querySelector('[name="timeout"]');
+  var adFormFields = adForm.querySelectorAll('fieldset');
+
+  var disableForm = function () {
+    for (var i = 0; i < adFormFields.length; i++) {
+      adFormFields[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  var enableForm = function () {
+    for (var i = 0; i < adFormFields.length; i++) {
+      adFormFields[i].removeAttribute('disabled');
+    }
+    adForm.classList.remove('ad-form--disabled');
+  };
+
+  var fillAddressPlaceholder = function () {
+    adFormAddress.setAttribute('placeholder', window.mainpin.getAddress());
+  };
+
+  var fillAddress = function () {
+    adFormAddress.value = window.mainpin.getLocation();
+    adFormAddress.setAttribute('readonly', 'readonly');
+  };
 
   var checkValidityCapacity = function () {
     var roomsNumber = adFormRoomNumber.value;
@@ -69,19 +92,10 @@
     checkValidityCapacity();
   });
 
-  mapPinMain.addEventListener('mousedown', function (evt) {
-    if (evt.button === 0) {
-      window.start.enablePage();
-      window.start.getAddress();
-      window.server.load(window.start.successHandler, window.start.errorHandler);
-    }
-  });
-
-  mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.key === window.const.ENTER_KEY) {
-      window.start.enablePage();
-      window.start.getAddress();
-      window.server.load(window.start.successHandler, window.start.errorHandler);
-    }
-  });
+  window.form = {
+    fillAddress: fillAddress,
+    fillAddressPlaceholder: fillAddressPlaceholder,
+    disable: disableForm,
+    enable: enableForm,
+  };
 })();

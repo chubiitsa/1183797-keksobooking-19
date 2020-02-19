@@ -11,6 +11,7 @@
   var PIN_HEIGHT = 70;
   var ENTER_KEY = 'Enter';
   var ESC_KEY = 'Escape';
+  var MAX_FLATS_NUMBER = 5;
 
   window.const = {
     FLAT_TYPES: FLAT_TYPES,
@@ -23,5 +24,6 @@
     PIN_HEIGHT: PIN_HEIGHT,
     ENTER_KEY: ENTER_KEY,
     ESC_KEY: ESC_KEY,
+    MAX_FLATS_NUMBER: MAX_FLATS_NUMBER,
   };
 })();

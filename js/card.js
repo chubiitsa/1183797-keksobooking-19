@@ -2,18 +2,12 @@
 
 (function () {
   var map = document.querySelector('.map');
+
   var cardTemplate = document.querySelector('#card')
     .content.querySelector('.map__card');
   var photoTemplate = document.querySelector('#card')
     .content.querySelector('.popup__photo');
 
-  map.addEventListener('click', function (evt) {
-    var element = evt.target.closest('.map__pin:not(.map__pin--main)');
-    if (element) {
-      var obj = window.start.getFlats()[parseInt(element.dataset.index, 10)];
-      showCard(obj);
-    }
-  });
 
   var printFeatures = function (arr) {
     var fragment = document.createDocumentFragment();
@@ -54,13 +48,11 @@
   };
 
   var showCard = function (obj) {
-    var card = map.querySelector('.map__card');
+    closeCard();
     var childElement = map.querySelector('.map__filters-container');
-    if (card) {
-      card.remove();
-    }
-    card = map.insertBefore(renderCard(obj), childElement);
-    card.querySelector('.popup__close').addEventListener('click', function () {
+    var card = map.insertBefore(renderCard(obj), childElement);
+    var closeButton = card.querySelector('.popup__close')
+    closeButton.addEventListener('click', function () {
       closeCard();
     });
     document.addEventListener('keydown', onPopupEscPress);
@@ -73,12 +65,15 @@
   };
 
   var closeCard = function () {
-    document.querySelector('.map__card').remove();
-    document.removeEventListener('keydown', onPopupEscPress);
+    var card = map.querySelector('.map__card');
+    if (card) {
+      card.remove();
+      document.removeEventListener('keydown', onPopupEscPress);
+    }
   };
 
   window.card = {
-    render: renderCard,
     show: showCard,
+    close: closeCard,
   };
 })();
