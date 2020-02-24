@@ -23,7 +23,7 @@
 
   flatTypeFilter.addEventListener('change', function () {
     window.card.close();
-    window.pin.hide();
+    window.map.hidePins();
     var newFlatType = flatTypeFilter.value;
     filter.onTypeChange(newFlatType);
   });

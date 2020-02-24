@@ -51,7 +51,7 @@
     closeCard();
     var childElement = map.querySelector('.map__filters-container');
     var card = map.insertBefore(renderCard(obj), childElement);
-    var closeButton = card.querySelector('.popup__close')
+    var closeButton = card.querySelector('.popup__close');
     closeButton.addEventListener('click', function () {
       closeCard();
     });

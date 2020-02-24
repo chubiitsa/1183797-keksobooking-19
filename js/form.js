@@ -25,12 +25,8 @@
     adForm.classList.remove('ad-form--disabled');
   };
 
-  var fillAddressPlaceholder = function () {
-    adFormAddress.setAttribute('placeholder', window.mainpin.getAddress());
-  };
-
-  var fillAddress = function () {
-    adFormAddress.value = window.mainpin.getLocation();
+  var fillAddress = function (x, y) {
+    adFormAddress.value = 'left: ' + x + ', top: ' + y;
     adFormAddress.setAttribute('readonly', 'readonly');
   };
 
@@ -94,8 +90,8 @@
 
   window.form = {
     fillAddress: fillAddress,
-    fillAddressPlaceholder: fillAddressPlaceholder,
     disable: disableForm,
     enable: enableForm,
+    adFormAddress: adFormAddress,
   };
 })();

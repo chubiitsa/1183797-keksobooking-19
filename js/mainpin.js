@@ -1,39 +1,93 @@
 'use strict';
 
 (function () {
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var mainPin = document.querySelector('.map__pin--main');
 
-  var getMainPinAddress = function () {
-    var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
-    var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight / 2);
-    return 'left: ' + x + ', right: ' + y;
+  var limit = {
+    left: -Infinity,
+    right: Infinity,
+    top: -Infinity,
+    bottom: Infinity
   };
 
-  var getMainPinLocation = function () {
-    var x = parseInt(mapPinMain.style.left.slice(0, 3), 10) + Math.floor(mapPinMain.clientWidth / 2);
-    var y = parseInt(mapPinMain.style.top.slice(0, 3), 10) + Math.floor(mapPinMain.clientHeight + 20); // 20 - это примерная высота острой части - не могу ее точно найти
-    return 'left: ' + x + ', right: ' + y;
+  var setMoveLimit = function (minX, maxX, minY, maxY) {
+    limit.left = minX;
+    limit.right = maxX;
+    limit.top = minY;
+    limit.bottom = maxY;
   };
 
-  mapPinMain.addEventListener('mousedown', function (evt) {
-    if (evt.button === 0) {
-      window.start.enablePage();
-      window.mainpin.getAddress();
-      window.server.load(window.start.successHandler, window.start.errorHandler);
+  var getPosition = function () {
+    var y;
+    if (window.app.isActive()) {
+      y = mainPin.offsetTop + mainPin.offsetHeight + window.const.PIN_HEIGHT;
+    } else {
+      y = mainPin.offsetTop + Math.round(mainPin.clientHeight / 2);
     }
+    return {
+      x: mainPin.offsetLeft + Math.round(mainPin.offsetWidth / 2),
+      y: y,
+    };
+  };
+
+  var setPosition = function (position) {
+    var left = position.x - Math.round(mainPin.offsetWidth / 2);
+    var top = position.y - mainPin.offsetHeight - window.const.PIN_HEIGHT;
+    mainPin.style.left = left + 'px';
+    mainPin.style.top = top + 'px';
+  };
+
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    if (evt.button === 0) {
+      window.app.enablePage();
+      window.app.onClickMainPin(getPosition().x, getPosition().y);
+      window.server.load(window.app.successHandler, window.app.errorHandler);
+    }
+
+    var startX = evt.clientX;
+    var startY = evt.clientY;
+    var startPosition = getPosition();
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shiftX = moveEvt.clientX - startX;
+      var shiftY = moveEvt.clientY - startY;
+
+      var x = startPosition.x + shiftX;
+      x = Math.max(limit.left, x);
+      x = Math.min(limit.right, x);
+      var y = startPosition.y + shiftY;
+      y = Math.max(limit.top, y);
+      y = Math.min(limit.bottom, y);
+      setPosition({x: x, y: y});
+
+      window.app.onMoveMainPin(x, y);
+
+    };
+
+    var onMouseUp = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 
-  mapPinMain.addEventListener('keydown', function (evt) {
+
+  mainPin.addEventListener('keydown', function (evt) {
     if (evt.key === window.const.ENTER_KEY) {
-      window.start.enablePage();
-      window.mainpin.getAddress();
-      window.server.load(window.start.successHandler, window.start.errorHandler);
+      window.app.enablePage();
+      window.app.onClickMainPin(getPosition().x, getPosition().y);
+      window.server.load(window.app.successHandler, window.app.errorHandler);
     }
   });
 
   window.mainpin = {
-    getAddress: getMainPinAddress,
-    getLocation: getMainPinLocation,
+    getPosition: getPosition,
+    setMoveLimit: setMoveLimit,
   };
 
 })();
