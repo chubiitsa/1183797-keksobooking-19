@@ -1,11 +1,13 @@
 'use strict';
 
 (function () {
+  var activeStatus = false;
 
   var disablePage = function () {
     window.form.disable();
     window.filter.disable();
-    window.form.fillAddressPlaceholder();
+    var position = window.mainpin.getPosition();
+    window.form.fillAddress(position.x, position.y);
   };
 
   var enablePage = function () {
@@ -13,6 +15,11 @@
     window.form.enable();
     window.filter.enable();
     window.form.fillAddress();
+    activeStatus = true;
+  };
+
+  var isActive = function () {
+    return activeStatus;
   };
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -29,11 +36,19 @@
     for (var i = 0; i < flats.length; i++) {
       similarFlats.push(flats[i]);
     }
-    window.pin.print(flats);
+    window.map.printPins(flats);
   };
 
   var getSimilarFlats = function () {
     return similarFlats;
+  };
+
+  var onMoveMainPin = function (x, y) {
+    window.form.fillAddress(x, y);
+  };
+
+  var onClickMainPin = function (x, y) {
+    window.form.fillAddress(x, y);
   };
 
   var errorHandler = function (errorMessage) {
@@ -54,10 +69,13 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.start = {
+  window.app = {
     enablePage: enablePage,
     successHandler: successHandler,
     errorHandler: errorHandler,
     getFlats: getSimilarFlats,
+    onMoveMainPin: onMoveMainPin,
+    onClickMainPin: onClickMainPin,
+    isActive: isActive,
   };
 })();
