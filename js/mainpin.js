@@ -3,6 +3,16 @@
 (function () {
   var mainPin = document.querySelector('.map__pin--main');
 
+  var mainPinInitialCoords = {
+    x: mainPin.offsetLeft,
+    y: mainPin.offsetTop,
+  };
+
+  var setInitialPosition = function () {
+    mainPin.style.left = mainPinInitialCoords.x + 'px';
+    mainPin.style.top = mainPinInitialCoords.y + 'px';
+  };
+
   var limit = {
     left: -Infinity,
     right: Infinity,
@@ -40,9 +50,10 @@
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     if (evt.button === 0) {
-      window.app.enablePage();
-      window.app.onClickMainPin(getPosition().x, getPosition().y);
-      window.server.load(window.app.successHandler, window.app.errorHandler);
+      if (!window.app.isActive()) {
+        window.app.enablePage();
+        window.app.onClickMainPin(getPosition().x, getPosition().y);
+      }
     }
 
     var startX = evt.clientX;
@@ -64,7 +75,6 @@
       setPosition({x: x, y: y});
 
       window.app.onMoveMainPin(x, y);
-
     };
 
     var onMouseUp = function () {
@@ -79,15 +89,18 @@
 
   mainPin.addEventListener('keydown', function (evt) {
     if (evt.key === window.const.ENTER_KEY) {
-      window.app.enablePage();
-      window.app.onClickMainPin(getPosition().x, getPosition().y);
-      window.server.load(window.app.successHandler, window.app.errorHandler);
+      if (!window.app.isActive()) {
+        window.app.enablePage();
+        window.app.onClickMainPin(getPosition().x, getPosition().y);
+      }
     }
   });
 
   window.mainpin = {
     getPosition: getPosition,
+    setPosition: setPosition,
     setMoveLimit: setMoveLimit,
+    setInitialPosition: setInitialPosition,
   };
 
 })();

@@ -10,6 +10,11 @@
     map.classList.remove('map--faded');
   };
 
+  var disableMap = function () {
+    map.classList.add('map--faded');
+    hidePins();
+  };
+
   map.addEventListener('click', function (evt) {
     var element = evt.target.closest('.map__pin:not(.map__pin--main)');
     if (element) {
@@ -52,6 +57,7 @@
 
   window.map = {
     enable: enableMap,
+    disable: disableMap,
     printPins: printPins,
     hidePins: hidePins,
   };

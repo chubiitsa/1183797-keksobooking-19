@@ -11,11 +11,13 @@
   var adFormCheckin = adForm.querySelector('[name="timein"]');
   var adFormCheckout = adForm.querySelector('[name="timeout"]');
   var adFormFields = adForm.querySelectorAll('fieldset');
+  var adFormResetButton = adForm.querySelector('.ad-form__reset');
 
   var disableForm = function () {
     for (var i = 0; i < adFormFields.length; i++) {
       adFormFields[i].setAttribute('disabled', 'disabled');
     }
+    adForm.classList.add('ad-form--disabled');
   };
 
   var enableForm = function () {
@@ -49,13 +51,17 @@
 
     switch (flatType) {
       case 'bungalo':
-        value = 0; break;
+        value = 0;
+        break;
       case 'flat':
-        value = 1000; break;
+        value = 1000;
+        break;
       case 'house':
-        value = 5000; break;
+        value = 5000;
+        break;
       case 'palace' :
-        value = 10000; break;
+        value = 10000;
+        break;
       default:
         value = 1000;
     }
@@ -88,10 +94,21 @@
     checkValidityCapacity();
   });
 
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.app.saveAdForm();
+    window.app.disablePage();
+  });
+
+  adFormResetButton.addEventListener('click', function () {
+    window.app.disablePage();
+  });
+
   window.form = {
     fillAddress: fillAddress,
     disable: disableForm,
     enable: enableForm,
-    adFormAddress: adFormAddress,
+    adForm: adForm,
+    adFormPrice: adFormPrice,
   };
 })();
