@@ -33,18 +33,18 @@
 
   var similarFlats = [];
 
-  var successHandler = function (flats) {
-    for (var j = 0; j < flats.length; j++) {
-      flats[j].index = j;
+  var successHandler = function (arr) {
+    for (var j = 0; j < arr.length; j++) {
+      arr[j].index = j;
     }
     similarFlats.length = 0;
-    for (var i = 0; i < flats.length; i++) {
-      similarFlats.push(flats[i]);
+    for (var i = 0; i < arr.length; i++) {
+      similarFlats.push(arr[i]);
     }
-    window.map.printPins(flats);
+    window.map.printPins(arr);
   };
 
-  var getSimilarFlats = function () {
+  var getFlats = function () {
     return similarFlats;
   };
 
@@ -85,7 +85,7 @@
     enablePage: enablePage,
     successHandler: successHandler,
     errorHandler: errorHandler,
-    getFlats: getSimilarFlats,
+    getFlats: getFlats,
     onMoveMainPin: onMoveMainPin,
     onClickMainPin: onClickMainPin,
     isActive: isActive,

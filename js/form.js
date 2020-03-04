@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var DEFAULT_AVATAR_SRC = 'img/muffin-grey.svg';
+
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('[name="address"]');
   var adFormRoomNumber = adForm.querySelector('[name="rooms"]');
@@ -12,12 +14,31 @@
   var adFormCheckout = adForm.querySelector('[name="timeout"]');
   var adFormFields = adForm.querySelectorAll('fieldset');
   var adFormResetButton = adForm.querySelector('.ad-form__reset');
+  var adFormAvatarChooser = adForm.querySelector('.ad-form__field input[type=file]');
+  var adFormPhotoChooser = adForm.querySelector('.ad-form__upload input[type=file]');
+
+  adFormAvatarChooser.addEventListener('change', function () {
+    var preview = document.querySelector('.ad-form-header__preview img');
+    window.photos.changePreview(adFormAvatarChooser, preview);
+  });
+
+  adFormPhotoChooser.addEventListener('change', function () {
+    var photoContainer = document.querySelector('.ad-form__photo');
+    photoContainer.innerHTML = '';
+    var preview = photoContainer.appendChild(document.createElement('img'));
+    preview.style.width = 70 + 'px';
+    preview.style.height = 70 + 'px';
+    preview.style.borderRadius = 5 + 'px';
+    window.photos.changePreview(adFormPhotoChooser, preview);
+  });
 
   var disableForm = function () {
     for (var i = 0; i < adFormFields.length; i++) {
       adFormFields[i].setAttribute('disabled', 'disabled');
     }
     adForm.classList.add('ad-form--disabled');
+    document.querySelector('.ad-form-header__preview img').src = DEFAULT_AVATAR_SRC;
+    document.querySelector('.ad-form__photo').innerHTML = '';
   };
 
   var enableForm = function () {

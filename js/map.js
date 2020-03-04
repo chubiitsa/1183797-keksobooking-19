@@ -16,8 +16,13 @@
   };
 
   map.addEventListener('click', function (evt) {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPins.forEach(function (mapPin) {
+      mapPin.classList.remove('map__pin--active');
+    });
     var element = evt.target.closest('.map__pin:not(.map__pin--main)');
     if (element) {
+      element.classList.add('map__pin--active');
       var obj = window.app.getFlats()[parseInt(element.dataset.index, 10)];
       window.card.show(obj);
     }
@@ -39,21 +44,12 @@
     });
   };
 
-  var updateSimilarFlats = function () {
-    var sameTypeFlats = window.app.getFlats().filter(function (it) {
-      if (flatType === 'any') {
-        printPins(window.app.getFlats());
-      }
-      return it.offer.type === flatType;
-    });
-    window.map.printPins(sameTypeFlats);
-  };
-
-  var flatType;
-  window.filter.filter.onTypeChange = function (type) {
-    flatType = type;
-    updateSimilarFlats();
-  };
+  window.filter.filter.onChange = window.debounce(function () {
+    hidePins();
+    window.card.close();
+    var filteredData = window.filter.applyToData(window.app.getFlats());
+    window.map.printPins(filteredData);
+  });
 
   window.map = {
     enable: enableMap,
