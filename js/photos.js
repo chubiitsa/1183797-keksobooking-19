@@ -3,7 +3,6 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-
   var changePhotoPreview = function (fileChooser, preview) {
     var file = fileChooser.files[0];
     var fileName = file.name.toLowerCase();

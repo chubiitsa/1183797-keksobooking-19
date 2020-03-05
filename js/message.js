@@ -2,11 +2,12 @@
 
 (function () {
   var main = document.querySelector('main');
+  var successMessage = document.querySelector('#success')
+    .content.querySelector('.success').cloneNode(true);
+  var errorMessage = document.querySelector('#error')
+    .content.querySelector('.error').cloneNode(true);
 
   var printSuccessMessage = function () {
-    var successMessage = document.querySelector('#success')
-      .content.querySelector('.success').cloneNode(true);
-
     main.appendChild(successMessage);
 
     var onEscPress = function (evt) {
@@ -24,16 +25,8 @@
     });
   };
 
-  var successSubmitHandler = function () {
-    printSuccessMessage();
-    window.mainpin.setInitialPosition();
-    window.app.disablePage();
-  };
-
-  var errorSubmitHandler = function () {
-    var errorMessage = document.querySelector('#error')
-      .content.querySelector('.error').cloneNode(true);
-
+  var printErrorMessage = function (error) {
+    errorMessage.querySelector('.error__message').innerHTML = error;
     main.appendChild(errorMessage);
 
     var errorButton = errorMessage.querySelector('.error__button');
@@ -54,12 +47,11 @@
     document.addEventListener('click', function () {
       errorMessage.remove();
       document.removeEventListener('keydown', onEscPress);
-
     });
   };
 
   window.message = {
-    printSuccess: successSubmitHandler,
-    printError: errorSubmitHandler,
+    printSuccess: printSuccessMessage,
+    printError: printErrorMessage,
   };
 })();
