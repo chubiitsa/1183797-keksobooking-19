@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PIN_HEIGHT = 22;
   var mainPin = document.querySelector('.map__pin--main');
 
   var mainPinInitialCoords = {
@@ -30,7 +31,7 @@
   var getPosition = function () {
     var y;
     if (window.app.isActive()) {
-      y = mainPin.offsetTop + mainPin.offsetHeight + window.const.PIN_HEIGHT;
+      y = mainPin.offsetTop + mainPin.offsetHeight + PIN_HEIGHT;
     } else {
       y = mainPin.offsetTop + Math.round(mainPin.clientHeight / 2);
     }
@@ -42,7 +43,7 @@
 
   var setPosition = function (position) {
     var left = position.x - Math.round(mainPin.offsetWidth / 2);
-    var top = position.y - mainPin.offsetHeight - window.const.PIN_HEIGHT;
+    var top = position.y - mainPin.offsetHeight - PIN_HEIGHT;
     mainPin.style.left = left + 'px';
     mainPin.style.top = top + 'px';
   };
@@ -88,7 +89,7 @@
 
 
   mainPin.addEventListener('keydown', function (evt) {
-    if (evt.key === window.const.ENTER_KEY) {
+    if (evt.key === window.tool.ENTER_KEY) {
       if (!window.app.isActive()) {
         window.app.enablePage();
         window.app.onClickMainPin(getPosition().x, getPosition().y);

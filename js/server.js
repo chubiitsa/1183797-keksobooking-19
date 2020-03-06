@@ -2,10 +2,10 @@
 
 (function () {
   var URL = 'https://js.dump.academy/keksobooking';
+  var TIMEOUT_IN_MS = 10000;
   var StatusCode = {
     OK: 200,
   };
-  var TIMEOUT_IN_MS = 10000;
 
   var createXHR = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -22,7 +22,7 @@
       onError('Произошла ошибка соединения. Проверьте, подключение к интернету');
     });
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + (xhr.timeout) / 1000 + 'с');
+      onError('Запрос не успел выполниться за ' + (xhr.timeout) / 1000 + ' сек');
     });
     xhr.timeout = TIMEOUT_IN_MS;
 

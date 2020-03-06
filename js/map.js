@@ -1,11 +1,14 @@
 'use strict';
 
 (function () {
+  var MAX_FLATS_NUMBER = 5;
+  var TOP_LIMIT = 130;
+  var BOTTOM_LIMIT = 630;
   var map = document.querySelector('.map');
   var pinsMap = document.querySelector('.map__pins');
   var data = [];
 
-  window.mainpin.setMoveLimit(0, map.clientLeft + map.offsetWidth, window.const.TOP_LIMIT, window.const.BOTTOM_LIMIT);
+  window.mainpin.setMoveLimit(0, map.clientLeft + map.offsetWidth, TOP_LIMIT, BOTTOM_LIMIT);
 
   var enableMap = function () {
     map.classList.remove('map--faded');
@@ -29,7 +32,7 @@
   };
 
   var printPins = function (flats) {
-    var printFlats = flats.slice(0, window.const.MAX_FLATS_NUMBER);
+    var printFlats = flats.slice(0, MAX_FLATS_NUMBER);
     var fragment = document.createDocumentFragment();
     printFlats.forEach(function (flat) {
       fragment.appendChild(window.pin.render(flat));

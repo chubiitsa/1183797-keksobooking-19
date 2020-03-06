@@ -2,18 +2,19 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var mapFilters = map.querySelector('.map__filters');
-  var typeFilter = mapFilters.querySelector('#housing-type');
-  var priceFilter = mapFilters.querySelector('#housing-price');
-  var roomsFilter = mapFilters.querySelector('#housing-rooms');
-  var guestsFilter = mapFilters.querySelector('#housing-guests');
+  var mapFiltersForm = map.querySelector('.map__filters');
+  var typeFilter = mapFiltersForm.querySelector('#housing-type');
+  var priceFilter = mapFiltersForm.querySelector('#housing-price');
+  var roomsFilter = mapFiltersForm.querySelector('#housing-rooms');
+  var guestsFilter = mapFiltersForm.querySelector('#housing-guests');
 
   var enableMapFilters = function () {
-    window.tool.setDisabled(mapFilters, false);
+    window.tool.setDisabled(mapFiltersForm, false);
   };
 
   var disableMapFilters = function () {
-    window.tool.setDisabled(mapFilters, true);
+    window.tool.setDisabled(mapFiltersForm, true);
+    mapFiltersForm.reset();
   };
 
   var filterByType = function (it) {
@@ -50,7 +51,7 @@
   };
 
   var getFilterByFeatures = function () {
-    var checkedFeatures = Array.from(mapFilters.querySelectorAll('.map__checkbox:checked'));
+    var checkedFeatures = Array.from(mapFiltersForm.querySelectorAll('.map__checkbox:checked'));
     return function (it) {
       return checkedFeatures.every(function (feature) {
         return it.offer.features.includes(feature.value);
@@ -66,7 +67,7 @@
       .filter(getFilterByFeatures());
   };
 
-  mapFilters.addEventListener('change', function () {
+  mapFiltersForm.addEventListener('change', function () {
     window.filter.onChange();
   });
 

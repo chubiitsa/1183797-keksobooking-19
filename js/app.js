@@ -17,22 +17,19 @@
 
   var enablePage = function () {
     activeStatus = true;
-    window.server.load(successHandler, errorHandler);
+    window.server.load(onLoadSuccess, onLoadError);
     window.map.enable();
     window.form.enable();
   };
 
-  var successHandler = function (arr) {
-    var data = [];
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].offer) {
-        data.push(arr[i]);
-      }
-    }
+  var onLoadSuccess = function (arr) {
+    var data = arr.filter(function (ad) {
+      return ad.offer;
+    });
     window.map.load(data);
   };
 
-  var errorHandler = function (errorMessage) {
+  var onLoadError = function (errorMessage) {
     window.message.printError(errorMessage);
     disablePage();
   };
