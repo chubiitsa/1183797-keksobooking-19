@@ -2,15 +2,18 @@
 
 (function () {
   var main = document.querySelector('main');
+  var successTemplate = document.querySelector('#success')
+    .content.querySelector('.success');
+  var errorTemplate = document.querySelector('#error')
+    .content.querySelector('.error');
+
 
   var printSuccessMessage = function () {
-    var successMessage = document.querySelector('#success')
-      .content.querySelector('.success').cloneNode(true);
-
+    var successMessage = successTemplate.cloneNode(true);
     main.appendChild(successMessage);
 
     var onEscPress = function (evt) {
-      if (evt.key === window.const.ESC_KEY) {
+      if (evt.key === window.tool.ESC_KEY) {
         successMessage.remove();
         document.removeEventListener('keydown', onEscPress);
       }
@@ -24,16 +27,9 @@
     });
   };
 
-  var successSubmitHandler = function () {
-    printSuccessMessage();
-    window.mainpin.setInitialPosition();
-    window.app.disablePage();
-  };
-
-  var errorSubmitHandler = function () {
-    var errorMessage = document.querySelector('#error')
-      .content.querySelector('.error').cloneNode(true);
-
+  var printErrorMessage = function (error) {
+    var errorMessage = errorTemplate.cloneNode(true);
+    errorMessage.querySelector('.error__message').textContent = error;
     main.appendChild(errorMessage);
 
     var errorButton = errorMessage.querySelector('.error__button');
@@ -43,7 +39,7 @@
     });
 
     var onEscPress = function (evt) {
-      if (evt.key === window.const.ESC_KEY) {
+      if (evt.key === window.tool.ESC_KEY) {
         errorMessage.remove();
         document.removeEventListener('keydown', onEscPress);
       }
@@ -54,12 +50,11 @@
     document.addEventListener('click', function () {
       errorMessage.remove();
       document.removeEventListener('keydown', onEscPress);
-
     });
   };
 
   window.message = {
-    printSuccess: successSubmitHandler,
-    printError: errorSubmitHandler,
+    printSuccess: printSuccessMessage,
+    printError: printErrorMessage,
   };
 })();

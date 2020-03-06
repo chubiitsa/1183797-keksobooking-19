@@ -1,25 +1,33 @@
 'use strict';
 
 (function () {
-  // функция генерации случайного числа в заданном промежутке
-  var generateRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-  };
-  // функция, которая создает перемешанный массив на основе другого массива
-  var generateRandomArray = function (arr) {
-    var randomArray = [];
-    var randomArrayLength = generateRandomNumber(0, arr.length);
-    while (randomArray.length < randomArrayLength) {
-      var randomElement = arr[generateRandomNumber(0, arr.length)];
-      if (randomArray.indexOf(randomElement) < 0) {
-        randomArray.push(randomElement);
-      }
+  var ENTER_KEY = 'Enter';
+  var ESC_KEY = 'Escape';
+  var DEBOUNCE_INTERVAL = 500; // ms
+
+  var setDisabled = function (collection, boolean) {
+    for (var j = 0; j < collection.length; j++) {
+      collection[j].disabled = boolean;
     }
-    return randomArray;
+  };
+
+  var debounce = function (cb) {
+    var lastTimeout = null;
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
   };
 
   window.tool = {
-    generateRandomNumber: generateRandomNumber,
-    generateRandomArray: generateRandomArray,
+    setDisabled: setDisabled,
+    debounce: debounce,
+    ENTER_KEY: ENTER_KEY,
+    ESC_KEY: ESC_KEY,
   };
 })();
