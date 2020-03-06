@@ -5,6 +5,7 @@
   var PREVIEW_WIDTH = 70;
   var PREVIEW_HEIGHT = 70;
   var PREVIEW_BORDER_RADIUS = 5;
+  var typePriceMap = {'palace': 10000, 'flat': 1000, 'house': 5000, 'bungalo': 0};
   var adForm = document.querySelector('.ad-form');
   var adFormFields = adForm.querySelectorAll('fieldset');
   var adFormResetButton = adForm.querySelector('.ad-form__reset');
@@ -25,6 +26,7 @@
     window.tool.setDisabled(adFormFields, true);
     document.querySelector('.ad-form-header__preview img').src = DEFAULT_AVATAR_SRC;
     document.querySelector('.ad-form__photo').innerHTML = '';
+    setMinPrice();
   };
 
   var enableForm = function () {
@@ -52,27 +54,10 @@
 
   var setMinPrice = function () {
     var flatType = adFormFlatType.value;
-    var value;
+    var minPrice = typePriceMap[flatType];
 
-    switch (flatType) {
-      case 'bungalo':
-        value = 0;
-        break;
-      case 'flat':
-        value = 1000;
-        break;
-      case 'house':
-        value = 5000;
-        break;
-      case 'palace' :
-        value = 10000;
-        break;
-      default:
-        value = 1000;
-    }
-
-    adFormPrice.setAttribute('min', value);
-    adFormPrice.setAttribute('placeholder', value);
+    adFormPrice.setAttribute('min', minPrice);
+    adFormPrice.setAttribute('placeholder', minPrice);
   };
 
   adFormCheckin.addEventListener('change', function () {

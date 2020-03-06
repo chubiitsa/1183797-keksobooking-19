@@ -7,6 +7,11 @@
   var priceFilter = mapFiltersForm.querySelector('#housing-price');
   var roomsFilter = mapFiltersForm.querySelector('#housing-rooms');
   var guestsFilter = mapFiltersForm.querySelector('#housing-guests');
+  var Price = {
+    LOW: 0,
+    MIDDLE: 1000,
+    HIGH: 50000
+  };
 
   var enableMapFilters = function () {
     window.tool.setDisabled(mapFiltersForm, false);
@@ -25,11 +30,11 @@
     var price = it.offer.price;
     switch (priceFilter.value) {
       case 'low':
-        return price > 0 && price < 10000;
+        return price > Price.LOW && price < Price.MIDDLE;
       case 'middle':
-        return price > 10000 && price < 50000;
+        return price > Price.MIDDLE && price < Price.HIGH;
       case 'high':
-        return price > 50000;
+        return price > Price.HIGH;
       default:
         return true;
     }
@@ -75,7 +80,8 @@
     enable: enableMapFilters,
     disable: disableMapFilters,
     applyToData: applyToData,
-    onChange: function () {},
+    onChange: function () {
+    },
   };
 
 })();
